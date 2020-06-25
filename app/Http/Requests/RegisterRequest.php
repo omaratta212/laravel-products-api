@@ -23,6 +23,8 @@ class RegisterRequest extends FormRequest
      */
     public function rules()
     {
+        return response()->json('dd');
+
         return [
             'name' => 'required|unique:users,name',
             'email' => 'required|email|unique:users,email',
