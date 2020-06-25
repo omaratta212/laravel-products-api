@@ -16,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return '<h1>Hi There 👋🏾</h1>';
 });
+
+Auth::routes();
