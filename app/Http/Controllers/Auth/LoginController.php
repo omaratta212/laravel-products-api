@@ -40,4 +40,10 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+
+    public function authenticated($request, $user)
+    {
+        return response()->json($user->toArray());
+    }
+
 }
