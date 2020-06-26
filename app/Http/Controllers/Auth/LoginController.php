@@ -43,7 +43,7 @@ class LoginController extends Controller
 
     public function authenticated($request, $user)
     {
-        return response()->json($user->toArray());
+        return response()->json($user);
     }
 
 }
