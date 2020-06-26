@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+
+Route::group(['prefix' => 'auth'], function () {
+    Auth::routes();
+    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+        return response()->json($request->user()->toArray());
+    });
 });
