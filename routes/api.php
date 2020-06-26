@@ -22,3 +22,7 @@ Route::group(['prefix' => 'auth'], function () {
         return response()->json($request->user()->toArray());
     });
 });
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::apiResource('products', 'ProductController');
+});
