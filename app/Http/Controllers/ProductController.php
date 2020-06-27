@@ -10,9 +10,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    private $storage_folder = "products/images";
 
     public function __construct()
     {
@@ -41,7 +43,12 @@ class ProductController extends Controller
         $product->user_id = $request->user()->id;
         $product->name = $request->name;
         $product->price = $request->price;
-        $product->main_image = $request->image;
+
+        if ($file = $request->file('main_image')) {
+            $main_image = explode('/', Storage::disk('public')->put($this->storage_folder, $file));
+            $product->main_image = last($main_image);
+        }
+
         $product->details = $request->details;
         $product->save();
 
@@ -66,9 +73,15 @@ class ProductController extends Controller
      * @param Product $product
      * @return ProductResource
      */
-    public function update(CreateProductRequest $request, Product $product )
+    public function update(CreateProductRequest $request, Product $product)
     {
-        $product->update($request->only(['name','price','main_image', 'details']));
+        $product->update($request->only(['name', 'price', 'details']));
+
+        if ($file = $request->file('main_image')) {
+            if ($product->main_image) Storage::delete($this->storage_folder . "/" . $product->main_image);
+            $main_image = explode('/', Storage::disk('public')->put($this->storage_folder, $file));
+            $product->main_image = last($main_image);
+        }
 
         return new ProductResource($product);
     }
@@ -81,7 +94,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $product ->delete();
-        return response()->json(null,204);
+        $product->delete();
+        return response()->json(null, 204);
     }
 }

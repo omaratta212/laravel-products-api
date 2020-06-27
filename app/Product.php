@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -24,5 +25,10 @@ class Product extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getMainImageAttribute($value)
+    {
+        return $value ? Storage::disk('public')->url('products/images/') . $value : 'https://dummyimage.com/601x361';
     }
 }
