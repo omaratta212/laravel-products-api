@@ -73,9 +73,9 @@ class ProductController extends Controller
      * @param Product $product
      * @return ProductResource
      */
-    public function update(CreateProductRequest $request, Product $product )
+    public function update(CreateProductRequest $request, Product $product)
     {
-        $product->update($request->only(['name','price', 'details']));
+        $product->update($request->only(['name', 'price', 'details']));
 
         if ($file = $request->file('main_image')) {
             if ($product->main_image) Storage::delete($this->storage_folder . "/" . $product->main_image);
@@ -94,7 +94,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $product ->delete();
-        return response()->json(null,204);
+        $product->delete();
+        return response()->json(null, 204);
     }
 }
